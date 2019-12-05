@@ -70,7 +70,7 @@ app.post("/users", (req, res) => {
 // remove()
 app.delete("/users/:id", async (req, res) => {
     const user = await db.findById(req.params.id)
-
+    
     if(user) {
         let deleted = await db.remove(req.params.id)
         res.json(deleted)

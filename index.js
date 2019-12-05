@@ -72,7 +72,7 @@ app.delete("/users/:id", async (req, res) => {
     const user = await db.findById(req.params.id)
 
     if(user) {
-        let deleted = await db.remove(user)
+        let deleted = await db.remove(req.params.id)
         res.json(deleted)
     } else if(!user) {
         res.status(404).json({ message: "The user with the specified ID does not exist." })

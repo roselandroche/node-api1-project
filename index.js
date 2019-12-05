@@ -16,12 +16,23 @@ app.get("/", (req, res) => {
 
 // find()
 app.get("/users", async (req, res) => {
-    let users = await db.find()
-    if(users) {
-        users
-    } else {
-        res.status(500).json({ errorMessage: "The users information could not be retrieved."})
-    }
+    db.find()
+        .then(users => {
+            res
+                .status(200)
+                .json(users)
+        })
+        .catch(() => {
+            res
+                .status(500)
+                .json({ errorMessage: "The users information could not be retrieved." })
+        })
+    // let users = await db.find()
+    // if(users) {
+    //     users
+    // } else {
+    //     res.status(500).json({ errorMessage: "The users information could not be retrieved."})
+    // }
 })
 
 // findById()
@@ -44,9 +55,8 @@ app.post("/users", (req, res) => {
         return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
     } else if(req.body.name && req.body.bio) {
         const newUser = {
-            id: String(db.length + 1),
             name: req.body.name,
-            bio: ""
+            bio: req.body.bio
         }
         db.insert(newUser)
         res.status(201).json(newUser)
@@ -62,8 +72,8 @@ app.delete("/users/:id", async (req, res) => {
     const user = await db.findById(req.params.id)
 
     if(user) {
-        db = db.find(row => row.id !== req.params.id)
-        res.json(user)
+        let deleted = await db.remove(user)
+        res.json(deleted)
     } else if(!user) {
         res.status(404).json({ message: "The user with the specified ID does not exist." })
     } else {

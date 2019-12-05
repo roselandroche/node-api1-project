@@ -31,10 +31,11 @@ app.get("/users/:id", (req, res) => {
 })
 
 // insert()
-app.post("", (req, res) => {
+app.post("/users", (req, res) => {
     const newUser = {
         id: String(db.length + 1),
-        name: req.body.name
+        name: req.body.name,
+        bio: ""
     }
     db.push(newUser)
     res.status(201).json(newUser)
@@ -43,7 +44,7 @@ app.post("", (req, res) => {
 // update() 
 
 // remove()
-app.delete("", (req, res) => {
+app.delete("/users/:id", (req, res) => {
     const user = db.find(row => row.id === req.params.id)
 
     if(user) {
@@ -60,4 +61,3 @@ const host = "127.0.0.1"
 app.listen(port, host, () => {
     console.log(`Server running at http://${host}:${port}`)
 })
-

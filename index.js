@@ -20,9 +20,9 @@ app.get("/users", (req, res) => {
 })
 
 // findById()
-app.get("/users/:id", (req, res) => {
-    const user = db.find(row => row.id === req.params.id)
-
+app.get("/users/:id", async (req, res) => {
+    const user = await db.findById(req.params.id)
+    console.log(user)
     if(user) {
         res.json(user)
     } else if(!user) {
@@ -43,7 +43,7 @@ app.post("/users", (req, res) => {
             name: req.body.name,
             bio: ""
         }
-        db.push(newUser)
+        db.insert(newUser)
         res.status(201).json(newUser)
     } else {
         return res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
@@ -53,8 +53,8 @@ app.post("/users", (req, res) => {
 // update() 
 
 // remove()
-app.delete("/users/:id", (req, res) => {
-    const user = db.find(row => row.id === req.params.id)
+app.delete("/users/:id", async (req, res) => {
+    const user = await db.findById(req.params.id)
 
     if(user) {
         db = db.find(row => row.id !== req.params.id)

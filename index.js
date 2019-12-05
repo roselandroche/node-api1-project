@@ -15,8 +15,13 @@ app.get("/", (req, res) => {
 })
 
 // find()
-app.get("/users", (req, res) => {
-    res.json(db)
+app.get("/users", async (req, res) => {
+    let users = await db.find()
+    if(users) {
+        users
+    } else {
+        res.status(500).json({ errorMessage: "The users information could not be retrieved."})
+    }
 })
 
 // findById()

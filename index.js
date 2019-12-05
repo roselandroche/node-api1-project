@@ -25,8 +25,11 @@ app.get("/users/:id", (req, res) => {
 
     if(user) {
         res.json(user)
-    } else {
-        res.status(404).json({ error: "User not found"})
+    } else if(!user) {
+        res.status(404).json({ message: "The user with the specified ID does not exist." })
+    }    
+    else {
+        res.status(500).json({ errorMessage: "The user information could not be retrieved."})
     }
 })
 
@@ -56,8 +59,10 @@ app.delete("/users/:id", (req, res) => {
     if(user) {
         db = db.find(row => row.id !== req.params.id)
         res.json(user)
+    } else if(!user) {
+        res.status(404).json({ message: "The user with the specified ID does not exist." })
     } else {
-        res.status(404).json({ error: "User not found" })
+        res.status(500).json({ errorMessage: "The user could not be removed" })
     }
 })
 

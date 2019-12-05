@@ -32,13 +32,19 @@ app.get("/users/:id", (req, res) => {
 
 // insert()
 app.post("/users", (req, res) => {
-    const newUser = {
-        id: String(db.length + 1),
-        name: req.body.name,
-        bio: ""
-    }
-    db.push(newUser)
-    res.status(201).json(newUser)
+    if(!req.body.name || !req.body.bio) {
+        return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+    } else if(req.body.name && req.body.bio) {
+        const newUser = {
+            id: String(db.length + 1),
+            name: req.body.name,
+            bio: ""
+        }
+        db.push(newUser)
+        res.status(201).json(newUser)
+    } else {
+        return res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
+    } 
 })
 
 // update() 
